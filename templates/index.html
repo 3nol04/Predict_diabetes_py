@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Predict Diabetes</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</head>
+
+<body>
+    <div class="container mt-5">
+        <h2>Predict Diabetes</h2>
+        <form onsubmit="event.preventDefault(); upload();">
+            <div class="mb-3">
+                <label for="Pregnancies" class="form-label">Pregnancies</label>
+                <input type="number" id="Pregnancies" name="Pregnancies" class="form-control" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="Glucose" class="form-label">Glucose</label>
+                <input type="number" id="Glucose" name="Glucose" class="form-control" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="BloodPressure" class="form-label">Blood Pressure</label>
+                <input type="number" id="BloodPressure" name="BloodPressure" class="form-control" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="SkinThickness" class="form-label">Skin Thickness</label>
+                <input type="number" id="SkinThickness" name="SkinThickness" class="form-control" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="Insulin" class="form-label">Insulin</label>
+                <input type="number" id="Insulin" name="Insulin" class="form-control" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="BMI" class="form-label">BMI</label>
+                <input type="number" id="BMI" name="BMI" class="form-control" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="DiabetesPedigreeFunction" class="form-label">Diabetes Pedigree Function</label>
+                <input type="number" id="DiabetesPedigreeFunction" name="DiabetesPedigreeFunction" class="form-control"
+                    required>
+            </div>
+
+            <div class="mb-3">
+                <label for="Age" class="form-label">Age</label>
+                <input type="number" id="Age" name="Age" class="form-control" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Predict</button>
+        </form>
+    </div>
+
+    <!-- Modal for displaying result -->
+    <div class="modal fade" id="resultModal" tabindex="-1" aria-labelledby="resultModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="resultModalLabel">Prediction Result</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="result"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const upload = async () => {
+            // Ambil data dari form
+            const data = {
+                Pregnancies: document.getElementById('Pregnancies').value,
+                Glucose: document.getElementById('Glucose').value,
+                BloodPressure: document.getElementById('BloodPressure').value,
+                SkinThickness: document.getElementById('SkinThickness').value,
+                Insulin: document.getElementById('Insulin').value,
+                BMI: document.getElementById('BMI').value,
+                DiabetesPedigreeFunction: document.getElementById('DiabetesPedigreeFunction').value,
+                Age: document.getElementById('Age').value
+            };
+
+            // Kirim request ke backend
+            const response = await fetch('http://localhost:5000/predict', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+
+            // Tangani response dari server
+            if (response.ok) {
+                const result = await response.json();
+                document.getElementById('result').innerHTML = `
+                    <h2>Prediction: ${result.prediction}</h2>
+                    <p>Negative Probability: ${result.probabilities.negative}</p>
+                    <p>Positive Probability: ${result.probabilities.positive}</p>
+                `;
+                
+                // Display the modal
+                const modal = new bootstrap.Modal(document.getElementById('resultModal'));
+                modal.show();
+            } else {
+                const error = await response.json();
+                document.getElementById('result').innerHTML = `<p>Error: ${error.error}</p>`;
+                
+                // Display the modal for error
+                const modal = new bootstrap.Modal(document.getElementById('resultModal'));
+                modal.show();
+            }
+        };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"></script>
+
+</body>
+
+</html>
