@@ -10,55 +10,58 @@
 </head>
 
 <body>
-    <div class="container mt-5">
+    <div class="container mt-5 ">
         <h2>Predict Diabetes</h2>
         <form onsubmit="event.preventDefault(); upload();">
-            <div class="mb-3">
-                <label for="Pregnancies" class="form-label">Pregnancies</label>
-                <input type="number" id="Pregnancies" name="Pregnancies" class="form-control" required>
+            <div class="d-flex justify-content-center container p-5">
+                <div class="d-flex-column justify-content-center p-5" style=" width: 500px; height: 500px">
+                    <div class="d-flex justify-content-center gap-3">
+                        <div>
+                            <div class="mb-3">
+                                <label for="Pregnancies" class="form-label">Pregnancies</label>
+                                <input type="number" id="Pregnancies" name="Pregnancies" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="Glucose" class="form-label">Glucose</label>
+                                <input type="number" id="Glucose" name="Glucose" class="form-control" required>
+                            </div>
+                                <div class="mb-3">
+                                <label for="BloodPressure" class="form-label">Blood Pressure</label>
+                                <input type="number" id="BloodPressure" name="BloodPressure" class="form-control" required>
+                            </div>
+                                <div class="mb-3">
+                                <label for="SkinThickness" class="form-label">Skin Thickness</label>
+                                <input type="number" id="SkinThickness" name="SkinThickness" class="form-control" required>
+                            </div>
+                        </div>
+                        <div>
+                        <div class="mb-3">
+                            <label for="Insulin" class="form-label">Insulin</label>
+                            <input type="number" id="Insulin" name="Insulin" class="form-control" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="BMI" class="form-label">BMI</label>
+                            <input type="number" id="BMI" name="BMI" class="form-control" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="DiabetesPedigreeFunction" class="form-label">Diabetes Pedigree Function</label>
+                            <input type="number" id="DiabetesPedigreeFunction" name="DiabetesPedigreeFunction" class="form-control"
+                            required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="Age" class="form-label">Age</label>
+                            <input type="number" id="Age" name="Age" class="form-control" required>
+                        </div>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Predict</button>
+                </div>
             </div>
-
-            <div class="mb-3">
-                <label for="Glucose" class="form-label">Glucose</label>
-                <input type="number" id="Glucose" name="Glucose" class="form-control" required>
-            </div>
-
-            <div class="mb-3">
-                <label for="BloodPressure" class="form-label">Blood Pressure</label>
-                <input type="number" id="BloodPressure" name="BloodPressure" class="form-control" required>
-            </div>
-
-            <div class="mb-3">
-                <label for="SkinThickness" class="form-label">Skin Thickness</label>
-                <input type="number" id="SkinThickness" name="SkinThickness" class="form-control" required>
-            </div>
-
-            <div class="mb-3">
-                <label for="Insulin" class="form-label">Insulin</label>
-                <input type="number" id="Insulin" name="Insulin" class="form-control" required>
-            </div>
-
-            <div class="mb-3">
-                <label for="BMI" class="form-label">BMI</label>
-                <input type="number" id="BMI" name="BMI" class="form-control" required>
-            </div>
-
-            <div class="mb-3">
-                <label for="DiabetesPedigreeFunction" class="form-label">Diabetes Pedigree Function</label>
-                <input type="number" id="DiabetesPedigreeFunction" name="DiabetesPedigreeFunction" class="form-control"
-                    required>
-            </div>
-
-            <div class="mb-3">
-                <label for="Age" class="form-label">Age</label>
-                <input type="number" id="Age" name="Age" class="form-control" required>
-            </div>
-
-            <button type="submit" class="btn btn-primary">Predict</button>
         </form>
     </div>
-
-    <!-- Modal for displaying result -->
     <div class="modal fade" id="resultModal" tabindex="-1" aria-labelledby="resultModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -89,7 +92,7 @@
             };
 
             // Kirim request ke backend
-            const response = await fetch('http://localhost:5000/predict', {
+            const response = await fetch('https://web-production-54f0c.up.railway.app/predict', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -106,8 +109,6 @@
                     <p>Negative Probability: ${result.probabilities.negative}</p>
                     <p>Positive Probability: ${result.probabilities.positive}</p>
                 `;
-                
-                // Display the modal
                 const modal = new bootstrap.Modal(document.getElementById('resultModal'));
                 modal.show();
             } else {
